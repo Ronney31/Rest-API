@@ -1,0 +1,1 @@
+# Resources package/folder is our external representation of an entity.

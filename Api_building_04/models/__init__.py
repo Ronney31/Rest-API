@@ -1,0 +1,1 @@
+# Models package/folder is our internal representation of an entity.
