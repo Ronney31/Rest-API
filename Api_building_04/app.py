@@ -15,8 +15,11 @@ from resources.item import Item, ItemList
 import create_table
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  # sqlalchemy will live at root directory
+
 ''' 
-    essentially, something is changed but not been saved to database, the extention flask_alchemy
+    essentially, something is changed but not been saved to database, the extension flask_alchemy
     was tracking every changed and took some resources.
     here, we are turning off because sqlAlchemy itself the main library has modification tracker,
     which is better.

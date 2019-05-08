@@ -10,11 +10,7 @@ class Item(Resource):
 
     @jwt_required()
     def get(self, name):
-        try:
-            item = ItemModel.find_by_name(name)
-        except:
-            return {"Message": "An error occurred while inserting the item."}, 500 # internal server error
-
+        item = ItemModel.find_by_name(name)
         if item:
             return item.json()
         return {'Message': 'Item Not Found'}, 404
@@ -25,37 +21,29 @@ class Item(Resource):
         data = Item.parser.parse_args()
         item = ItemModel(name, data['price'])
         try:
-            item.insert()
+            item.save_to_db()
         except:
             return {"Message": "An error occurred while inserting the item."}, 500  # internal server error
         return item.json(), 201  # https status code 201 for created
 
     def delete(self, name):
-        if ItemModel.find_by_name(name):
-            connection = sqlite3.connect('data.db')
-            cursor = connection.cursor()
-            query = "DELETE FROM items WHERE name=?"
-            cursor.execute(query, (name,))
-            connection.commit()
-            connection.close()
+        item = ItemModel.find_by_name(name)
+        if item:
+            item.delete_from_db()
             return {'message': 'Item deleted'}, 200
         return {'message': 'Not Found'}, 404
 
     def put(self, name):    # will create or update item
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
-        new_item = ItemModel(name, data['price'])
+
         if item is None:
-            try:
-                new_item.insert()
-            except:
-                return {"Message": "An error occurred while inserting the item."}, 500
+            item = ItemModel(name, data['price'])  # because find_by_name found nothing, so we are creating new one.
         else:
-            try:
-                new_item.update()
-            except:
-                return {"Message": "An error occurred while inserting the item."}, 500
-        return new_item.json()
+            item.price = data['price']
+        item.save_to_db()  # as the item is uniquely identified by id
+
+        return item.json()
 
 
 class ItemList(Resource):
