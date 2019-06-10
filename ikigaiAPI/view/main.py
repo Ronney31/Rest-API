@@ -81,12 +81,6 @@ class frontEnd():
         self.topQues.delete('0', 'end')
         self.bottomQues.delete('0', 'end')
 
-    def afterClear(self):
-        self.leftQues.insert(0, frontEnd.__ls)
-        self.rightQues.insert(0, frontEnd.__rs)
-        self.topQues.insert(0, frontEnd.__ts)
-        self.bottomQues.insert(0, frontEnd.__bs)
-
     def addUserData(self):
         __userName = self.entry_userName.get()
         __leftQues = self.leftQues.get()
@@ -96,17 +90,14 @@ class frontEnd():
 
         try:
             __url = "http://127.0.0.1:5010/iki/"+__userName
-            __data = {"q1": __leftQues, "q2": __rightQues, "q3": __topQues, "q4": __bottomQues}
+            __data = {"q1": __leftQues, "q2": __rightQues, "q3": __topQues, "q4": __rightQues}
             r = requests.post(__url, data=__data)
             if r.status_code != 201:
                 self.status['text'] = r.json()['Message']
                 return
             self.status['text'] = "Record Successfully Added"
-            self.clearEntry()
-            self.afterClear()
         except Exception as e:
             self.status['text'] = "An Error Occur While Adding Record."
-            print (e)
         self.userList()
 
     def updateUserData(self):
@@ -121,14 +112,12 @@ class frontEnd():
             return
         try:
             __url = "http://127.0.0.1:5010/iki/" + __userName
-            __data = {"q1": __leftQues, "q2": __rightQues, "q3": __topQues, "q4": __bottomQues}
+            __data = {"q1": __leftQues, "q2": __rightQues, "q3": __topQues, "q4": __rightQues}
             r = requests.put(__url, data=__data)
             if r.status_code != 200:
                 msg = "Something went wrong"
                 raise msg
             self.status['text'] = "Record Successfully Updated."
-            self.clearEntry()
-            self.afterClear()
         except Exception as e:
             self.status['text'] = "An Error Occur While Updating Record."
         self.userList()
@@ -146,7 +135,6 @@ class frontEnd():
                 raise msg
             self.status['text'] = "Record Successfully Deleted."
             self.clearEntry()
-            self.afterClear()
         except Exception as e:
             self.status['text'] = "An Error Occur While Deleting Record."
         self.userList()
@@ -243,8 +231,7 @@ if __name__ == "__main__":
 
     FE = frontEnd(__root)
     FE.main()
-    # FE.userList(NONE)
-
+    
     __root.title("IKIGAI Python Application")
     __root.geometry("1000x900")
     __root.mainloop()
