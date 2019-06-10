@@ -93,6 +93,8 @@ class frontEnd():
                 self.status['text'] = r.json()['Message']
                 return
             self.status['text'] = "Record Successfully Added"
+            self.clearEntry()
+            self.afterClear()
         except Exception as e:
             self.status['text'] = "An Error Occur While Adding Record."
         self.userList()
@@ -233,9 +235,3 @@ if __name__ == "__main__":
     __root.title("IKIGAI Python Application")
     __root.geometry("1000x900")
     __root.mainloop()
-
-
-
-
-
-
