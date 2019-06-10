@@ -35,15 +35,6 @@ class frontEnd():
         canvasName.create_oval(300 - radius, 360 - radius, 300 + radius, 360 + radius, width=2, outline="red")
         canvasName.create_oval(300 - radius, 145 - radius, 300 + radius, 145 + radius, width=2, outline="blue")
 
-    def popupmsg(self, msg):
-        popup = Tk()
-        popup.wm_title("!")
-        label = Label(popup, text=msg, font=("Verdana", 12))
-        label.pack(side="top", fill="x", pady=10)
-        B1 = Button(popup, text="Okay", command=popup.destroy)
-        B1.pack()
-        popup.mainloop()
-
     def userList(self):
         self.userData.clear()
         self.listbox.delete(0, 'end')
@@ -237,10 +228,8 @@ class frontEnd():
 
 if __name__ == "__main__":
     __root = Tk()
-
     FE = frontEnd(__root)
     FE.main()
-    
     __root.title("IKIGAI Python Application")
     __root.geometry("1000x900")
     __root.mainloop()
